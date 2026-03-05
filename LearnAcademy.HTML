@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LearnAcademy.ai — Master AI, ML, Web3 & Robotics</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --g1:#061410; --g2:#071a22; --bg:#050d0a;
+  --green:#00ff88; --green2:#00cc6a;
+  --green-dim:rgba(0,255,136,0.12);
+  --blue:#00c8ff; --blue2:#0099cc;
+  --blue-dim:rgba(0,200,255,0.12);
+  --cyan:#00eeff;
+  --text:#d4f5e8; --text2:#7ab89a; --text3:#3d6b52;
+  --card:rgba(255,255,255,0.025); --border:rgba(0,200,255,0.12);
+  --border2:rgba(0,255,136,0.15);
+  --r:10px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;overflow-x:hidden;cursor:none}
+
+/* CURSOR */
+#cur{position:fixed;width:10px;height:10px;border-radius:50%;background:var(--green);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .3s;mix-blend-mode:screen}
+#cur-ring{position:fixed;width:34px;height:34px;border-radius:50%;border:1px solid var(--blue);pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform .12s ease;opacity:.5}
+
+/* BG */
+.mesh{position:fixed;inset:0;z-index:0;pointer-events:none}
+.mesh::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 600px 400px at 10% 20%,rgba(0,255,136,.07),transparent),radial-gradient(ellipse 500px 500px at 90% 80%,rgba(0,200,255,.06),transparent)}
+.grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(0,200,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,200,255,.025) 1px,transparent 1px);background-size:50px 50px;animation:gridDrift 25s linear infinite}
+@keyframes gridDrift{to{background-position:50px 50px}}
+
+/* NAVBAR */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 4%;background:rgba(5,13,10,.85);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);transition:background .3s}
+.logo-wrap{display:flex;align-items:center;gap:10px;text-decoration:none;cursor:none}
+.logo-svg{width:40px;height:40px;flex-shrink:0}
+.logo-text .lt1{font-family:'Orbitron',monospace;font-size:.82rem;font-weight:900;letter-spacing:2px;background:linear-gradient(90deg,var(--green),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:block}
+.logo-text .lt2{font-family:'JetBrains Mono',monospace;font-size:.5rem;color:var(--text2);letter-spacing:3px;display:block;margin-top:2px}
+.nav-links{display:flex;gap:1.8rem;list-style:none}
+.nav-links a{color:var(--text2);text-decoration:none;font-size:.78rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;position:relative;transition:color .3s;padding-bottom:4px}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--green),var(--blue));transform:scaleX(0);transition:transform .3s;transform-origin:left}
+.nav-links a:hover{color:var(--green)}
+.nav-links a:hover::after{transform:scaleX(1)}
+.nav-right{display:flex;align-items:center;gap:.8rem}
+.nav-login{background:transparent;border:1px solid var(--border);color:var(--text2);padding:8px 16px;border-radius:6px;font-family:'Orbitron',monospace;font-size:.58rem;letter-spacing:2px;cursor:none;transition:all .3s}
+.nav-login:hover{border-color:var(--blue);color:var(--blue)}
+.nav-signup{background:linear-gradient(135deg,var(--green),var(--blue));color:var(--bg);padding:9px 18px;border:none;border-radius:6px;font-family:'Orbitron',monospace;font-size:.58rem;font-weight:700;letter-spacing:2px;cursor:none;transition:all .3s;box-shadow:0 0 20px rgba(0,255,136,.3)}
+.nav-signup:hover{box-shadow:0 0 35px rgba(0,255,136,.5);transform:translateY(-1px)}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 4% 60px;text-align:center;z-index:1;overflow:hidden}
+.hero-logo{margin-bottom:2.2rem;animation:logoIn 1.2s cubic-bezier(.16,1,.3,1) both}
+.hero-logo svg{filter:drop-shadow(0 0 30px rgba(0,255,136,.5))}
+@keyframes logoIn{from{opacity:0;transform:scale(.5) translateY(30px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.hero-pill{display:inline-flex;align-items:center;gap:8px;padding:5px 16px 5px 8px;border:1px solid rgba(0,200,255,.25);border-radius:100px;margin-bottom:1.8rem;background:rgba(0,200,255,.04);font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:2px;color:var(--blue);animation:fadeUp .8s .3s both}
+.pill-dot{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--blue));display:flex;align-items:center;justify-content:center;font-size:.75rem}
+.hero-h1{font-family:'Orbitron',monospace;font-size:clamp(2.2rem,6vw,5.2rem);font-weight:900;line-height:1.07;margin-bottom:1.2rem;animation:fadeUp .8s .45s both}
+.hero-h1 .w1{display:block;color:var(--text)}
+.hero-h1 .w2{display:block;background:linear-gradient(90deg,var(--green) 0%,var(--cyan) 40%,var(--blue) 100%);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shine 4s linear infinite}
+@keyframes shine{0%{background-position:0%}100%{background-position:200%}}
+.hero-sub{max-width:570px;font-size:1.08rem;line-height:1.85;color:var(--text2);margin-bottom:2.8rem;font-weight:500;animation:fadeUp .8s .6s both}
+.hero-btns{display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;animation:fadeUp .8s .75s both}
+.btn-g{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--green),var(--blue));color:var(--bg);border:none;padding:15px 36px;font-family:'Orbitron',monospace;font-size:.7rem;font-weight:700;letter-spacing:2.5px;border-radius:var(--r);cursor:none;text-transform:uppercase;transition:all .3s;box-shadow:0 0 25px rgba(0,255,136,.35)}
+.btn-g::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.15),transparent);opacity:0;transition:.3s}
+.btn-g:hover{transform:translateY(-3px);box-shadow:0 12px 50px rgba(0,255,136,.55)}
+.btn-g:hover::before{opacity:1}
+.btn-o{background:transparent;color:var(--blue);border:1px solid rgba(0,200,255,.35);padding:15px 36px;font-family:'Orbitron',monospace;font-size:.7rem;font-weight:700;letter-spacing:2.5px;border-radius:var(--r);cursor:none;text-transform:uppercase;transition:all .3s}
+.btn-o:hover{background:rgba(0,200,255,.07);border-color:var(--blue);transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,200,255,.2)}
+.hero-stats{display:flex;gap:3.5rem;margin-top:4.5rem;justify-content:center;flex-wrap:wrap;animation:fadeUp .8s .9s both}
+.stat-item{text-align:center}
+.stat-n{font-family:'Orbitron',monospace;font-size:1.9rem;font-weight:900;background:linear-gradient(135deg,var(--green),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-l{font-size:.65rem;letter-spacing:2.5px;color:var(--text2);text-transform:uppercase;margin-top:4px;font-family:'JetBrains Mono',monospace}
+.particles{position:absolute;inset:0;pointer-events:none}
+.p{position:absolute;border-radius:50%;animation:pfloat linear infinite}
+@keyframes pfloat{0%{transform:translateY(110vh);opacity:0}5%{opacity:.7}90%{opacity:.3}100%{transform:translateY(-80px);opacity:0}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+
+/* DIVIDER */
+.div{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(0,200,255,.18),transparent)}
+
+/* SECTIONS */
+section{position:relative;z-index:1}
+.sec{padding:85px 4%}
+.sh{text-align:center;margin-bottom:3.2rem}
+.sh-tag{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:4px;color:var(--blue);text-transform:uppercase;display:block;margin-bottom:.7rem}
+.sh-title{font-family:'Orbitron',monospace;font-size:clamp(1.5rem,3.5vw,2.7rem);font-weight:900;background:linear-gradient(135deg,var(--text) 50%,var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.15}
+.sh-desc{color:var(--text2);font-size:.95rem;margin-top:.8rem;max-width:470px;margin-left:auto;margin-right:auto;line-height:1.75}
+
+/* CARD BASE */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);transition:all .4s;cursor:none;position:relative;overflow:hidden}
+.card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),var(--blue));transform:scaleX(0);transition:.4s;transform-origin:left}
+.card:hover{transform:translateY(-7px);border-color:rgba(0,200,255,.28);box-shadow:0 20px 60px rgba(0,0,0,.45),0 0 35px rgba(0,200,255,.08)}
+.card:hover::after{transform:scaleX(1)}
+
+/* CATEGORIES */
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.3rem}
+.cat-card{padding:2.2rem 1.8rem}
+.cat-icon{font-size:2.5rem;margin-bottom:1.2rem;display:block}
+.cat-name{font-family:'Orbitron',monospace;font-size:.87rem;font-weight:700;margin-bottom:.6rem;color:var(--text)}
+.cat-info{font-size:.87rem;color:var(--text2);line-height:1.72}
+.cat-cnt{margin-top:1.2rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:2px;display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:100px;border:1px solid var(--border);color:var(--blue)}
+
+/* COURSES */
+.courses-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem}
+.c-card{border-radius:var(--r);overflow:hidden}
+.c-thumb{height:165px;display:flex;align-items:center;justify-content:center;font-size:3.3rem;position:relative}
+.c-t1{background:linear-gradient(135deg,#071a10,#002a1a)}
+.c-t2{background:linear-gradient(135deg,#07101a,#001a2a)}
+.c-t3{background:linear-gradient(135deg,#1a0710,#2a0020)}
+.c-t4{background:linear-gradient(135deg,#0a1007,#101a00)}
+.c-t5{background:linear-gradient(135deg,#1a1007,#2a1800)}
+.c-t6{background:linear-gradient(135deg,#071018,#001020)}
+.c-ring{position:absolute;width:150px;height:150px;border-radius:50%;border:1px solid rgba(255,255,255,.04);animation:ringSpin 8s linear infinite}
+@keyframes ringSpin{to{transform:rotate(360deg)}}
+.c-badge{position:absolute;top:10px;right:10px;padding:3px 9px;border-radius:100px;font-family:'JetBrains Mono',monospace;font-size:.56rem;font-weight:700;letter-spacing:1px}
+.b-ai{background:rgba(0,255,136,.12);color:var(--green);border:1px solid rgba(0,255,136,.25)}
+.b-ml{background:rgba(0,200,255,.12);color:var(--blue);border:1px solid rgba(0,200,255,.25)}
+.b-w3{background:rgba(167,139,250,.12);color:#a78bfa;border:1px solid rgba(167,139,250,.25)}
+.b-rb{background:rgba(245,158,11,.12);color:#f59e0b;border:1px solid rgba(245,158,11,.25)}
+.b-new{background:rgba(239,68,68,.12);color:#ef4444;border:1px solid rgba(239,68,68,.25)}
+.c-body{padding:1.3rem}
+.c-cat{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:3px;color:var(--blue);text-transform:uppercase;margin-bottom:.45rem}
+.c-title{font-family:'Syne',sans-serif;font-size:.93rem;font-weight:700;margin-bottom:.65rem;line-height:1.4;color:var(--text)}
+.c-meta{display:flex;gap:.85rem;font-size:.77rem;color:var(--text2);margin-bottom:.9rem}
+.c-footer{display:flex;align-items:center;justify-content:space-between;padding-top:.85rem;border-top:1px solid rgba(0,200,255,.08)}
+.c-price{font-family:'Orbitron',monospace;font-size:1rem;font-weight:900;color:var(--green)}
+.c-price .old{font-size:.7rem;color:var(--text2);text-decoration:line-through;margin-right:5px;font-family:'Syne';font-weight:400}
+.enroll{background:transparent;border:1px solid rgba(0,200,255,.28);color:var(--blue);padding:6px 14px;border-radius:6px;font-family:'Orbitron',monospace;font-size:.56rem;letter-spacing:1.5px;cursor:none;transition:all .3s;text-transform:uppercase}
+.enroll:hover{background:rgba(0,200,255,.1);border-color:var(--blue)}
+
+/* HOW */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;position:relative}
+.steps::before{content:'';position:absolute;top:2.7rem;left:13%;right:13%;height:1px;background:linear-gradient(90deg,transparent,var(--green) 20%,var(--blue) 80%,transparent);opacity:.35}
+.step{text-align:center;padding:1.5rem 1rem}
+.step-n{width:55px;height:55px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.2rem;background:linear-gradient(135deg,var(--g1),var(--g2));border:1px solid var(--border);font-family:'Orbitron',monospace;font-size:1.1rem;font-weight:900;color:var(--green);box-shadow:0 0 20px rgba(0,255,136,.15);transition:all .3s}
+.step:hover .step-n{box-shadow:0 0 35px rgba(0,255,136,.5);transform:scale(1.1)}
+.step-t{font-family:'Orbitron',monospace;font-size:.8rem;font-weight:700;margin-bottom:.5rem;color:var(--text)}
+.step-d{font-size:.87rem;color:var(--text2);line-height:1.7}
+
+/* TESTIMONIALS */
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem}
+.t-card{padding:1.8rem;border-radius:var(--r)}
+.t-stars{color:var(--green);font-size:.82rem;letter-spacing:2px;margin-bottom:.8rem}
+.t-text{font-size:.88rem;color:var(--text2);line-height:1.8;margin-bottom:1.2rem;font-style:italic}
+.t-author{display:flex;align-items:center;gap:.85rem}
+.t-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--g1),var(--g2));border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.t-name{font-weight:700;font-size:.88rem;color:var(--text)}
+.t-role{font-size:.68rem;color:var(--blue);letter-spacing:.5px;margin-top:2px;font-family:'JetBrains Mono',monospace}
+
+/* PRICING */
+.pricing-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem;max-width:1000px;margin:0 auto}
+.p-card{padding:2.2rem 1.8rem;text-align:center;border-radius:var(--r)}
+.p-card.hot{background:linear-gradient(135deg,rgba(0,255,136,.05),rgba(0,200,255,.05));border-color:rgba(0,200,255,.35);box-shadow:0 0 60px rgba(0,200,255,.1);transform:scale(1.04)}
+.p-card.hot::before{content:'BEST VALUE';position:absolute;top:14px;right:-28px;background:linear-gradient(135deg,var(--green),var(--blue));color:var(--bg);font-family:'Orbitron',monospace;font-size:.48rem;font-weight:700;padding:4px 44px;transform:rotate(45deg);letter-spacing:2px}
+.p-plan{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:4px;color:var(--blue);text-transform:uppercase;margin-bottom:.7rem}
+.p-amt{font-family:'Orbitron',monospace;font-size:2.5rem;font-weight:900;color:var(--text)}
+.p-amt span{font-size:.88rem;color:var(--text2)}
+.p-desc{font-size:.83rem;color:var(--text2);margin:.7rem 0 1.2rem;line-height:1.6}
+.p-list{list-style:none;margin-bottom:1.7rem;text-align:left}
+.p-list li{padding:.42rem 0;font-size:.86rem;color:var(--text2);display:flex;gap:.65rem;align-items:flex-start;border-bottom:1px solid rgba(0,200,255,.05)}
+.p-list li::before{content:'◈';color:var(--green);flex-shrink:0;font-size:.65rem;margin-top:3px}
+.p-btn{width:100%;padding:11px;border-radius:6px;font-family:'Orbitron',monospace;font-size:.62rem;font-weight:700;letter-spacing:2px;cursor:none;transition:all .3s;text-transform:uppercase;border:none}
+.p-outline{background:transparent;border:1px solid var(--border);color:var(--text2)}
+.p-outline:hover{border-color:var(--blue);color:var(--blue);background:rgba(0,200,255,.06)}
+.p-solid{background:linear-gradient(135deg,var(--green),var(--blue));color:var(--bg);box-shadow:0 0 20px rgba(0,255,136,.3)}
+.p-solid:hover{box-shadow:0 0 40px rgba(0,255,136,.55);transform:translateY(-2px)}
+
+/* CONTACT */
+.contact-sec{padding:85px 4%}
+.contact-inner{max-width:920px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:3rem;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2.8rem;position:relative;overflow:hidden}
+.contact-inner::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 0% 0%,rgba(0,255,136,.04),transparent 60%)}
+.ci-title{font-family:'Orbitron',monospace;font-size:1.3rem;font-weight:900;margin-bottom:.9rem;background:linear-gradient(135deg,var(--text),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.ci-desc{color:var(--text2);font-size:.9rem;line-height:1.8;margin-bottom:1.8rem}
+.c-det{display:flex;align-items:center;gap:.85rem;margin-bottom:1rem;padding:.9rem;background:rgba(0,200,255,.04);border:1px solid var(--border);border-radius:8px;transition:all .3s}
+.c-det:hover{border-color:rgba(0,255,136,.25);box-shadow:0 0 20px rgba(0,255,136,.07)}
+.c-ico{width:36px;height:36px;border-radius:7px;background:linear-gradient(135deg,var(--green-dim),var(--blue-dim));border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0}
+.c-lbl{font-size:.62rem;color:var(--text2);letter-spacing:1px;font-family:'JetBrains Mono',monospace;margin-bottom:2px}
+.c-val{font-size:.88rem;color:var(--text);font-weight:600}
+.c-val a{color:var(--green);text-decoration:none;transition:color .3s}
+.c-val a:hover{color:var(--blue)}
+.c-form{display:flex;flex-direction:column;gap:.95rem}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:.95rem}
+.fg{display:flex;flex-direction:column;gap:.35rem}
+.fg label{font-size:.6rem;letter-spacing:2px;color:var(--text2);text-transform:uppercase;font-family:'JetBrains Mono',monospace}
+.fg input,.fg textarea,.fg select{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:6px;padding:10px 13px;color:var(--text);font-family:'Syne',sans-serif;font-size:.88rem;transition:all .3s;outline:none;cursor:none}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:rgba(0,200,255,.5);box-shadow:0 0 0 3px rgba(0,200,255,.07)}
+.fg textarea{resize:vertical;min-height:95px}
+.fg select option{background:var(--bg);color:var(--text)}
+.f-sub{background:linear-gradient(135deg,var(--green),var(--blue));color:var(--bg);border:none;padding:13px;border-radius:6px;font-family:'Orbitron',monospace;font-size:.68rem;font-weight:700;letter-spacing:2px;cursor:none;transition:all .3s;text-transform:uppercase;box-shadow:0 0 20px rgba(0,255,136,.3)}
+.f-sub:hover{box-shadow:0 0 40px rgba(0,255,136,.5);transform:translateY(-2px)}
+.f-ok{display:none;padding:11px;background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.25);border-radius:6px;color:var(--green);font-size:.82rem;text-align:center;font-family:'JetBrains Mono',monospace;letter-spacing:.5px}
+
+/* CTA BAND */
+.cta-band{padding:95px 4%;text-align:center;position:relative}
+.cta-band::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 800px 400px at 50% 50%,rgba(0,200,255,.05),transparent)}
+.cta-inner{max-width:640px;margin:0 auto;position:relative;border:1px solid rgba(0,200,255,.2);border-radius:16px;padding:4rem 3rem;background:linear-gradient(135deg,rgba(0,255,136,.03),rgba(0,200,255,.03));backdrop-filter:blur(12px)}
+.cta-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 14px;border-radius:100px;border:1px solid rgba(0,255,136,.25);background:rgba(0,255,136,.06);font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:2px;color:var(--green);margin-bottom:1.6rem}
+.cta-h2{font-family:'Orbitron',monospace;font-size:clamp(1.3rem,3vw,2.2rem);font-weight:900;margin-bottom:1rem;background:linear-gradient(135deg,var(--text) 40%,var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.cta-p{color:var(--text2);font-size:.97rem;margin-bottom:2rem;line-height:1.75}
+
+/* FOOTER */
+footer{background:rgba(0,0,0,.35);border-top:1px solid var(--border);padding:50px 4% 22px}
+.f-grid{display:grid;grid-template-columns:2.2fr 1fr 1fr 1fr;gap:2.3rem;margin-bottom:2.3rem}
+.f-brand-desc{font-size:.83rem;color:var(--text2);line-height:1.85;max-width:265px;margin-top:.85rem}
+.f-epill{display:inline-flex;align-items:center;gap:7px;margin-top:1rem;padding:7px 12px;border:1px solid rgba(0,200,255,.22);border-radius:7px;background:rgba(0,200,255,.04);text-decoration:none;transition:all .3s}
+.f-epill:hover{border-color:var(--green);box-shadow:0 0 18px rgba(0,255,136,.14)}
+.f-epill span{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--blue);letter-spacing:1px}
+.f-epill:hover span{color:var(--green)}
+.f-col h5{font-family:'Orbitron',monospace;font-size:.6rem;letter-spacing:3px;color:var(--blue);text-transform:uppercase;margin-bottom:1.2rem}
+.f-col ul{list-style:none}
+.f-col ul li{margin-bottom:.6rem}
+.f-col ul li a{color:var(--text2);text-decoration:none;font-size:.86rem;transition:color .3s}
+.f-col ul li a:hover{color:var(--green)}
+.f-bottom{border-top:1px solid rgba(0,200,255,.07);padding-top:1.2rem;display:flex;justify-content:space-between;align-items:center}
+.f-copy{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text2)}
+.f-socials{display:flex;gap:.75rem}
+.soc{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);color:var(--text2);text-decoration:none;font-size:.78rem;transition:all .3s;font-weight:700}
+.soc:hover{border-color:var(--green);color:var(--green);box-shadow:0 0 14px rgba(0,255,136,.2)}
+
+/* TOAST */
+#toast{position:fixed;bottom:2rem;right:2rem;z-index:9000;background:linear-gradient(135deg,#071a10,#002a1a);border:1px solid rgba(0,255,136,.3);border-radius:10px;padding:13px 18px;display:none;align-items:center;gap:10px;box-shadow:0 0 30px rgba(0,255,136,.2)}
+@keyframes toastIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* REVEAL */
+.rev{opacity:0;transform:translateY(35px);transition:opacity .7s ease,transform .7s ease}
+.rev.in{opacity:1;transform:translateY(0)}
+
+/* RESPONSIVE */
+@media(max-width:1024px){.cat-grid,.courses-grid{grid-template-columns:repeat(2,1fr)}.f-grid{grid-template-columns:1fr 1fr}.contact-inner{grid-template-columns:1fr}}
+@media(max-width:768px){.nav-links,.nav-login{display:none}.cat-grid,.courses-grid,.testi-grid,.pricing-wrap{grid-template-columns:1fr}.steps{grid-template-columns:repeat(2,1fr)}.steps::before{display:none}.p-card.hot{transform:none}.f-grid{grid-template-columns:1fr}.hero-stats{gap:2rem}.f-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-ring"></div>
+<div class="mesh"></div>
+<div class="grid-bg"></div>
+
+<!-- ══ NAVBAR ══ -->
+<nav id="navbar">
+  <a href="#" class="logo-wrap">
+    <svg class="logo-svg" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="nlg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#00ff88"/>
+          <stop offset="100%" stop-color="#00c8ff"/>
+        </linearGradient>
+        <filter id="nglow"><feGaussianBlur stdDeviation="1.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <!-- Hexagon -->
+      <path d="M22 3 L39 12.5 L39 31.5 L22 41 L5 31.5 L5 12.5 Z" stroke="url(#nlg)" stroke-width="1.5" fill="rgba(0,255,136,0.06)" filter="url(#nglow)"/>
+      <path d="M22 9 L33 15 L33 27 L22 33 L11 27 L11 15 Z" stroke="url(#nlg)" stroke-width=".8" fill="rgba(0,200,255,0.03)" opacity=".6"/>
+      <!-- LA monogram -->
+      <path d="M14 15 L14 29 L26 29" stroke="url(#nlg)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" fill="none" filter="url(#nglow)"/>
+      <circle cx="30" cy="15" r="3" fill="url(#nlg)" filter="url(#nglow)"/>
+      <circle cx="14" cy="15" r="1.8" fill="rgba(0,255,136,.9)"/>
+      <circle cx="14" cy="22" r="1.1" fill="rgba(0,200,255,.7)"/>
+      <line x1="14" y1="22" x2="20" y2="22" stroke="rgba(0,200,255,.4)" stroke-width="1" stroke-dasharray="2 2.5"/>
+    </svg>
+    <div class="logo-text">
+      <span class="lt1">LearnAcademy.ai</span>
+      <span class="lt2">FUTURE TECH EDUCATION</span>
+    </div>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#categories">Courses</a></li>
+    <li><a href="#how">Process</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+
+  <div class="nav-right">
+    <button class="nav-login">Log In</button>
+    <button class="nav-signup">Enroll Free →</button>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="particles" id="ptcl"></div>
+
+  <!-- Hero Logo — large animated -->
+  <div class="hero-logo">
+    <svg width="112" height="112" viewBox="0 0 112 112" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="hlg1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#00ff88"/><stop offset="50%" stop-color="#00eeff"/><stop offset="100%" stop-color="#00c8ff"/>
+        </linearGradient>
+        <linearGradient id="hlg2" x1="100%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#00c8ff" stop-opacity=".45"/><stop offset="100%" stop-color="#00ff88" stop-opacity=".45"/>
+        </linearGradient>
+        <filter id="hglow"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="sglow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <animateTransform/>
+      </defs>
+      <!-- Orbiting outer ring -->
+      <circle cx="56" cy="56" r="53" stroke="url(#hlg1)" stroke-width=".6" fill="none" opacity=".25" stroke-dasharray="5 10">
+        <animateTransform attributeName="transform" type="rotate" from="0 56 56" to="360 56 56" dur="20s" repeatCount="indefinite"/>
+      </circle>
+      <!-- Main hexagon -->
+      <path d="M56 8 L101 31.5 L101 78.5 L56 102 L11 78.5 L11 31.5 Z" stroke="url(#hlg1)" stroke-width="2.2" fill="rgba(0,255,136,0.04)" filter="url(#hglow)"/>
+      <!-- Inner hexagon -->
+      <path d="M56 20 L90 38 L90 74 L56 92 L22 74 L22 38 Z" stroke="url(#hlg2)" stroke-width="1.5" fill="rgba(0,200,255,0.03)"/>
+      <!-- Big L -->
+      <path d="M36 33 L36 77 L76 77" stroke="url(#hlg1)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" fill="none" filter="url(#sglow)"/>
+      <!-- Dot accent -->
+      <circle cx="76" cy="33" r="8" fill="url(#hlg1)" filter="url(#sglow)"/>
+      <!-- Corner dots -->
+      <circle cx="36" cy="33" r="4.5" fill="rgba(0,255,136,.9)" filter="url(#hglow)"/>
+      <circle cx="36" cy="55" r="2.8" fill="rgba(0,200,255,.7)"/>
+      <circle cx="56" cy="77" r="2.8" fill="rgba(0,200,255,.7)"/>
+      <!-- Circuit lines -->
+      <line x1="36" y1="55" x2="52" y2="55" stroke="rgba(0,200,255,.45)" stroke-width="1.5" stroke-dasharray="3 4"/>
+      <line x1="56" y1="77" x2="56" y2="91" stroke="rgba(0,200,255,.35)" stroke-width="1" stroke-dasharray="2 4"/>
+    </svg>
+  </div>
+
+  <div class="hero-pill">
+    <span class="pill-dot">🚀</span>
+    INDIA'S #1 TECH EDUCATION PLATFORM — 2025
+  </div>
+
+  <h1 class="hero-h1">
+    <span class="w1">Seekho. Build Karo.</span>
+    <span class="w2">Future Khud Banao.</span>
+  </h1>
+
+  <p class="hero-sub">AI, Machine Learning, Web3 aur Robotics — sabse advanced tech stack ek jagah seekho. Expert instructors, live projects aur guaranteed job support ke saath apna career transform karo.</p>
+
+  <div class="hero-btns">
+    <button class="btn-g" onclick="document.getElementById('categories').scrollIntoView({behavior:'smooth'})">Explore Courses →</button>
+    <button class="btn-o" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">✉ Contact Us</button>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-item"><div class="stat-n" data-target="50000">0</div><div class="stat-l">Active Students</div></div>
+    <div class="stat-item"><div class="stat-n" data-target="200">0</div><div class="stat-l">Expert Courses</div></div>
+    <div class="stat-item"><div class="stat-n" data-pct="98">0%</div><div class="stat-l">Satisfaction Rate</div></div>
+    <div class="stat-item"><div class="stat-n" data-target="40">0</div><div class="stat-l">Hiring Partners</div></div>
+  </div>
+</section>
+
+<div class="div"></div>
+
+<!-- ══ CATEGORIES ══ -->
+<section class="sec" id="categories">
+  <div class="sh rev">
+    <span class="sh-tag">// Explore Domains</span>
+    <h2 class="sh-title">4 Pillars of Future Technology</h2>
+    <p class="sh-desc">Jo technologies duniya badal rahi hain — unhe master karo aur apna dream career banao</p>
+  </div>
+  <div class="cat-grid">
+    <div class="card cat-card rev"><span class="cat-icon">🤖</span><div class="cat-name">Artificial Intelligence</div><p class="cat-info">Neural networks, NLP, Computer Vision, LLMs aur production-grade AI systems design karo. GPT-level models build karna seekho.</p><span class="cat-cnt">📚 65 Courses</span></div>
+    <div class="card cat-card rev" style="transition-delay:.1s"><span class="cat-icon">📊</span><div class="cat-name">Machine Learning</div><p class="cat-info">Data science, deep learning, TensorFlow, PyTorch — real-world ML models build karo aur cloud pe deploy karo.</p><span class="cat-cnt">📚 58 Courses</span></div>
+    <div class="card cat-card rev" style="transition-delay:.2s"><span class="cat-icon">⛓️</span><div class="cat-name">Web3 & Blockchain</div><p class="cat-info">Smart contracts, DeFi protocols, NFT ecosystems, Solidity programming aur decentralized apps Ethereum pe banao.</p><span class="cat-cnt">📚 42 Courses</span></div>
+    <div class="card cat-card rev" style="transition-delay:.3s"><span class="cat-icon">🦾</span><div class="cat-name">Robotics</div><p class="cat-info">ROS2, Arduino, autonomous navigation, computer vision integration aur physical robots ko program karo.</p><span class="cat-cnt">📚 35 Courses</span></div>
+  </div>
+</section>
+
+<div class="div"></div>
+
+<!-- ══ COURSES ══ -->
+<section class="sec" id="courses">
+  <div class="sh rev">
+    <span class="sh-tag">// Featured Courses</span>
+    <h2 class="sh-title">Top Rated Courses</h2>
+    <p class="sh-desc">Industry experts ke saath build ki gayi courses — courses sirf ₹5,999 se shuru hote hain</p>
+  </div>
+  <div class="courses-grid">
+
+    <div class="card c-card rev">
+      <div class="c-thumb c-t1"><div class="c-ring"></div><span>🧠</span><span class="c-badge b-ai">AI</span></div>
+      <div class="c-body"><div class="c-cat">Artificial Intelligence</div><div class="c-title">Complete LLM Engineering & Prompt Design Masterclass</div><div class="c-meta"><span>⭐ 4.9</span><span>🕐 42 hrs</span><span>👥 12.4K</span></div>
+        <div class="c-footer"><div class="c-price"><span class="old">₹9,999</span>₹5,999</div><button class="enroll" onclick="addToCart('LLM Engineering','5999')">Enroll Now</button></div>
+      </div>
+    </div>
+
+    <div class="card c-card rev" style="transition-delay:.1s">
+      <div class="c-thumb c-t2"><div class="c-ring"></div><span>🔬</span><span class="c-badge b-ml">ML</span></div>
+      <div class="c-body"><div class="c-cat">Machine Learning</div><div class="c-title">Deep Learning with PyTorch: Basics to Production Deploy</div><div class="c-meta"><span>⭐ 4.8</span><span>🕐 56 hrs</span><span>👥 9.8K</span></div>
+        <div class="c-footer"><div class="c-price"><span class="old">₹11,999</span>₹6,999</div><button class="enroll" onclick="addToCart('Deep Learning PyTorch','6999')">Enroll Now</button></div>
+      </div>
+    </div>
+
+    <div class="card c-card rev" style="transition-delay:.2s">
+      <div class="c-thumb c-t3"><div class="c-ring"></div><span>⛓️</span><span class="c-badge b-w3">Web3</span></div>
+      <div class="c-body"><div class="c-cat">Web3 & Blockchain</div><div class="c-title">Solidity & Smart Contract Dev: Build Full DeFi Applications</div><div class="c-meta"><span>⭐ 4.7</span><span>🕐 38 hrs</span><span>👥 7.2K</span></div>
+        <div class="c-footer"><div class="c-price"><span class="old">₹8,999</span>₹5,999</div><button class="enroll" onclick="addToCart('Solidity DeFi','5999')">Enroll Now</button></div>
+      </div>
+    </div>
+
+    <div class="card c-card rev" style="transition-delay:.1s">
+      <div class="c-thumb c-t4"><div class="c-ring"></div><span>🦾</span><span class="c-badge b-rb">Robotics</span></div>
+      <div class="c-body"><div class="c-cat">Robotics Engineering</div><div class="c-title">ROS2 & Autonomous Robot Programming Complete Bootcamp</div><div class="c-meta"><span>⭐ 4.8</span><span>🕐 48 hrs</span><span>👥 5.6K</span></div>
+        <div class="c-footer"><div class="c-price"><span class="old">₹9,999</span>₹6,499</div><button class="enroll" onclick="addToCart('ROS2 Robotics','6499')">Enroll Now</button></div>
+      </div>
+    </div>
+
+    <div class="card c-card rev" style="transition-delay:.2s">
+      <div class="c-thumb c-t5"><div class="c-ring"></div><span>📈</span><span class="c-badge b-new">NEW</span></div>
+      <div class="c-body"><div class="c-cat">Machine Learning</div><div class="c-title">ML for Finance: Algorithmic Trading with AI-Powered Models</div><div class="c-meta"><span>⭐ 4.9</span><span>🕐 30 hrs</span><span>👥 4.1K</span></div>
+        <div class="c-footer"><div class="c-price"><span class="old">₹7,999</span>₹5,999</div><button class="enroll" onclick="addToCart('ML for Finance','5999')">Enroll Now</button></div>
+      </div>
+    </div>
+
+    <div class="card c-card rev" style="transition-delay:.3s">
+      <div class="c-thumb c-t6"><div class="c-ring"></div><span>🌐</span><span class="c-badge b-w3">Web3</span></div>
+      <div class="c-body"><div class="c-cat">Web3 & Blockchain</div><div class="c-title">NFT & Metaverse Development: Complete Web3 Creator Guide</div><div class="c-meta"><span>⭐ 4.6</span><span>🕐 25 hrs</span><span>👥 6.3K</span></div>
+        <div class="c-footer"><div class="c-price"><span class="old">₹6,999</span>₹5,999</div><button class="enroll" onclick="addToCart('NFT Metaverse Dev','5999')">Enroll Now</button></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- TOAST -->
+<div id="toast" style="animation:toastIn .4s ease">
+  <span style="font-size:1.1rem">✅</span>
+  <div>
+    <div style="font-family:'Orbitron',monospace;font-size:.68rem;color:#00ff88;letter-spacing:1px" id="toast-t">Added!</div>
+    <div style="font-size:.73rem;color:#7ab89a;margin-top:2px" id="toast-m"></div>
+  </div>
+</div>
+
+<div class="div"></div>
+
+<!-- ══ HOW IT WORKS ══ -->
+<section class="sec" id="how">
+  <div class="sh rev">
+    <span class="sh-tag">// Learning Journey</span>
+    <h2 class="sh-title">Seedha Seekho, Seedha Succeed</h2>
+    <p class="sh-desc">Hamara proven 4-step system jo tumhe beginner se industry expert banata hai</p>
+  </div>
+  <div class="steps">
+    <div class="step rev"><div class="step-n">01</div><div class="step-t">Choose Path</div><p class="step-d">AI, ML, Web3 ya Robotics — apna passion choose karo aur personalized roadmap pao</p></div>
+    <div class="step rev" style="transition-delay:.15s"><div class="step-n">02</div><div class="step-t">Learn by Doing</div><p class="step-d">Live coding, interactive labs aur real projects ke saath hands-on experience lo</p></div>
+    <div class="step rev" style="transition-delay:.3s"><div class="step-n">03</div><div class="step-t">Build Portfolio</div><p class="step-d">Industry-grade projects banao jo GitHub pe shine kare aur employers ko impress kare</p></div>
+    <div class="step rev" style="transition-delay:.45s"><div class="step-n">04</div><div class="step-t">Get Hired</div><p class="step-d">Certificate pao aur 40+ partner companies ke saath direct placement support lo</p></div>
+  </div>
+</section>
+
+<div class="div"></div>
+
+<!-- ══ TESTIMONIALS ══ -->
+<section class="sec" id="testimonials">
+  <div class="sh rev">
+    <span class="sh-tag">// Student Success</span>
+    <h2 class="sh-title">Jinhoone Seekha, Jinhoone Jeeta</h2>
+    <p class="sh-desc">Real students, real results — unke words mein unki transformation</p>
+  </div>
+  <div class="testi-grid">
+    <div class="card t-card rev"><div class="t-stars">★★★★★</div><p class="t-text">"LearnAcademy.ai ne meri life badal di. AI course ke baad Bangalore mein ₹18 LPA ka job mila. Projects real-world se bilkul match karte hain."</p><div class="t-author"><div class="t-av">👨‍💻</div><div><div class="t-name">Arjun Sharma</div><div class="t-role">ML Engineer @ Google India</div></div></div></div>
+    <div class="card t-card rev" style="transition-delay:.1s"><div class="t-stars">★★★★★</div><p class="t-text">"Web3 course ke baad main khud DeFi startup run kar rahi hoon. 24/7 mentor support aur community — dono amazing hain."</p><div class="t-author"><div class="t-av">👩‍💻</div><div><div class="t-name">Priya Patel</div><div class="t-role">Blockchain Founder, Mumbai</div></div></div></div>
+    <div class="card t-card rev" style="transition-delay:.2s"><div class="t-stars">★★★★★</div><p class="t-text">"Robotics bootcamp ne ROS2 seekhne mein help kiya. IIT project mein first prize jeeta aur ISRO internship bhi mili. Genuinely life-changing!"</p><div class="t-author"><div class="t-av">🧑‍🔬</div><div><div class="t-name">Rohan Mehta</div><div class="t-role">Robotics Intern @ ISRO</div></div></div></div>
+  </div>
+</section>
+
+<div class="div"></div>
+
+<!-- ══ PRICING ══ -->
+<section class="sec" id="pricing">
+  <div class="sh rev">
+    <span class="sh-tag">// Investment Plans</span>
+    <h2 class="sh-title">Apne Future Mein Invest Karo</h2>
+    <p class="sh-desc">Individual courses ₹5,999 se shuru — ya Pro plan mein sab kuch unlimited pao</p>
+  </div>
+  <div class="pricing-wrap">
+    <div class="card p-card rev">
+      <div class="p-plan">Starter</div>
+      <div class="p-amt">₹0<span>/month</span></div>
+      <div class="p-desc">Beginners ke liye perfect start</div>
+      <ul class="p-list">
+        <li>5 Free Courses Access</li>
+        <li>Community Forum & Discord</li>
+        <li>Basic Coding Projects</li>
+        <li>Completion Badges</li>
+        <li>Mobile App Access</li>
+      </ul>
+      <button class="p-btn p-outline" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Start Free Today</button>
+    </div>
+    <div class="card p-card hot rev" style="transition-delay:.1s">
+      <div class="p-plan">Pro Learner</div>
+      <div class="p-amt">₹999<span>/month</span></div>
+      <div class="p-desc">All courses + placement support</div>
+      <ul class="p-list">
+        <li>All 200+ Courses Unlimited</li>
+        <li>Individual courses from ₹5,999</li>
+        <li>Live Weekly Mentor Sessions</li>
+        <li>Industry-Grade Projects</li>
+        <li>Certificate of Completion</li>
+        <li>Job Board & Placement Support</li>
+        <li>1-on-1 Doubt Solving</li>
+        <li>LinkedIn Profile Review</li>
+      </ul>
+      <button class="p-btn p-solid" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get Pro Access →</button>
+    </div>
+    <div class="card p-card rev" style="transition-delay:.2s">
+      <div class="p-plan">Enterprise</div>
+      <div class="p-amt">₹2,999<span>/month</span></div>
+      <div class="p-desc">Teams aur organizations ke liye</div>
+      <ul class="p-list">
+        <li>Everything in Pro</li>
+        <li>Team Analytics Dashboard</li>
+        <li>Custom Learning Paths</li>
+        <li>Dedicated Account Manager</li>
+        <li>API & LMS Integration</li>
+        <li>Priority 24/7 Support</li>
+      </ul>
+      <button class="p-btn p-outline" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Contact Sales</button>
+    </div>
+  </div>
+</section>
+
+<div class="div"></div>
+
+<!-- ══ CONTACT ══ -->
+<section class="contact-sec" id="contact">
+  <div class="sh rev">
+    <span class="sh-tag">// Get In Touch</span>
+    <h2 class="sh-title">Baat Karo Humse</h2>
+    <p class="sh-desc">Course selection, pricing ya career guidance — hum har sawaal ka jawab dene ke liye ready hain</p>
+  </div>
+  <div class="contact-inner rev">
+    <div>
+      <div class="ci-title">Hum Yahan Hain Tumhare Liye</div>
+      <p class="ci-desc">Apna tech career shuru karne mein madad chahiye? Hamari team sabse helpful guidance dene ke liye ready hai.</p>
+      <div class="c-det"><div class="c-ico">✉️</div><div><div class="c-lbl">Email Us</div><div class="c-val"><a href="mailto:learnacademy.ai@gmail.com">learnacademy.ai@gmail.com</a></div></div></div>
+      <div class="c-det"><div class="c-ico">📍</div><div><div class="c-lbl">Location</div><div class="c-val">India — Pan India Online Platform</div></div></div>
+      <div class="c-det"><div class="c-ico">⏰</div><div><div class="c-lbl">Support Hours</div><div class="c-val">Mon–Sat, 9 AM – 8 PM IST</div></div></div>
+      <div class="c-det"><div class="c-ico">⚡</div><div><div class="c-lbl">Response Time</div><div class="c-val">Within 4–6 hours guaranteed</div></div></div>
+    </div>
+    <form class="c-form" onsubmit="submitForm(event)">
+      <div class="f-row">
+        <div class="fg"><label>Your Name *</label><input type="text" id="fn" placeholder="Aapka naam" required></div>
+        <div class="fg"><label>Email *</label><input type="email" id="fe" placeholder="aapka@email.com" required></div>
+      </div>
+      <div class="fg"><label>Phone Number</label><input type="tel" id="fp" placeholder="+91 98765 43210"></div>
+      <div class="fg">
+        <label>Interested In</label>
+        <select id="ft">
+          <option value="">Select a domain...</option>
+          <option>Artificial Intelligence</option>
+          <option>Machine Learning</option>
+          <option>Web3 & Blockchain</option>
+          <option>Robotics</option>
+          <option>Pro Subscription (₹999/month)</option>
+          <option>Enterprise Plan</option>
+          <option>General Inquiry</option>
+        </select>
+      </div>
+      <div class="fg"><label>Message *</label><textarea id="fm" placeholder="Apna sawaal ya message likhein..." required></textarea></div>
+      <button type="submit" class="f-sub">Send Message →</button>
+      <div class="f-ok" id="fok">✅ Message sent! We'll reply to <strong>learnacademy.ai@gmail.com</strong> within 4–6 hours.</div>
+    </form>
+  </div>
+</section>
+
+<div class="div"></div>
+
+<!-- ══ CTA ══ -->
+<section class="cta-band">
+  <div class="cta-inner rev">
+    <div class="cta-pill">⚡ LIMITED OFFER — COURSES FROM ₹5,999</div>
+    <h2 class="cta-h2">Apna Tech Career Aaj Shuru Karo</h2>
+    <p class="cta-p">50,000+ students already apni life transform kar chuke hain. India ki top tech companies mein place ho chuke hain. Tumhari baari hai.</p>
+    <button class="btn-g" style="font-size:.78rem;padding:16px 46px" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Join Now — ₹5,999 se Shuru →</button>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="f-grid">
+    <div>
+      <a href="#" class="logo-wrap">
+        <svg width="34" height="34" viewBox="0 0 44 44" fill="none">
+          <defs><linearGradient id="flg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00ff88"/><stop offset="100%" stop-color="#00c8ff"/></linearGradient></defs>
+          <path d="M22 3 L39 12.5 L39 31.5 L22 41 L5 31.5 L5 12.5 Z" stroke="url(#flg)" stroke-width="1.5" fill="rgba(0,255,136,0.06)"/>
+          <path d="M14 15 L14 29 L26 29" stroke="url(#flg)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <circle cx="30" cy="15" r="3" fill="url(#flg)"/>
+          <circle cx="14" cy="15" r="1.8" fill="rgba(0,255,136,.9)"/>
+        </svg>
+        <div class="logo-text" style="margin-left:8px">
+          <span class="lt1">LearnAcademy.ai</span>
+          <span class="lt2">FUTURE TECH EDUCATION</span>
+        </div>
+      </a>
+      <p class="f-brand-desc">India ka #1 platform AI, ML, Web3 aur Robotics sikhne ke liye. Expert instructors, live projects, guaranteed placement support.</p>
+      <a href="mailto:learnacademy.ai@gmail.com" class="f-epill"><span>✉</span><span>learnacademy.ai@gmail.com</span></a>
+    </div>
+    <div class="f-col"><h5>Courses</h5><ul>
+      <li><a href="#courses">→ Artificial Intelligence</a></li>
+      <li><a href="#courses">→ Machine Learning</a></li>
+      <li><a href="#courses">→ Web3 & Blockchain</a></li>
+      <li><a href="#courses">→ Robotics & ROS2</a></li>
+      <li><a href="#courses">→ Data Science</a></li>
+      <li><a href="#courses">→ All Courses</a></li>
+    </ul></div>
+    <div class="f-col"><h5>Platform</h5><ul>
+      <li><a href="#">→ About Us</a></li>
+      <li><a href="#">→ Blog & News</a></li>
+      <li><a href="#">→ Careers</a></li>
+      <li><a href="#">→ Become Instructor</a></li>
+      <li><a href="#">→ Affiliate Program</a></li>
+      <li><a href="#">→ Press Kit</a></li>
+    </ul></div>
+    <div class="f-col"><h5>Support</h5><ul>
+      <li><a href="#">→ Help Center</a></li>
+      <li><a href="mailto:learnacademy.ai@gmail.com">→ Contact Us</a></li>
+      <li><a href="mailto:learnacademy.ai@gmail.com" style="color:var(--green);font-size:.75rem;font-family:'JetBrains Mono',monospace">learnacademy.ai@gmail.com</a></li>
+      <li><a href="#">→ Privacy Policy</a></li>
+      <li><a href="#">→ Terms of Service</a></li>
+      <li><a href="#">→ Refund Policy</a></li>
+    </ul></div>
+  </div>
+  <div class="f-bottom">
+    <div class="f-copy">© 2025 LearnAcademy.ai — Built for Future Builders of India 🇮🇳</div>
+    <div class="f-socials">
+      <a href="#" class="soc" title="Twitter/X">𝕏</a>
+      <a href="#" class="soc" title="LinkedIn">in</a>
+      <a href="#" class="soc" title="YouTube">▶</a>
+      <a href="#" class="soc" title="Discord">◈</a>
+      <a href="#" class="soc" title="Telegram">✈</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── Cursor ──
+const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function loop(){rx+=(mx-rx)*.13;ry+=(my-ry)*.13;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();
+document.querySelectorAll('a,button,.card,.step,.c-det').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='18px';cur.style.height='18px';cur.style.background='var(--blue)';ring.style.transform='translate(-50%,-50%) scale(1.4)'});
+  el.addEventListener('mouseleave',()=>{cur.style.width='10px';cur.style.height='10px';cur.style.background='var(--green)';ring.style.transform='translate(-50%,-50%) scale(1)'});
+});
+
+// ── Particles ──
+const pc=document.getElementById('ptcl');
+for(let i=0;i<45;i++){const p=document.createElement('div');p.className='p';p.style.cssText=`left:${Math.random()*100}%;width:${1+Math.random()*2.5}px;height:${1+Math.random()*2.5}px;background:${Math.random()>.5?'var(--green)':'var(--blue)'};animation-duration:${7+Math.random()*12}s;animation-delay:-${Math.random()*18}s;opacity:${.2+Math.random()*.5}`;pc.appendChild(p)}
+
+// ── Reveal ──
+const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.08});
+document.querySelectorAll('.rev').forEach(el=>obs.observe(el));
+
+// ── Counter ──
+function animC(el){
+  const isPct=el.dataset.pct!==undefined;
+  const tgt=isPct?parseInt(el.dataset.pct):parseInt(el.dataset.target);
+  let c=0,step=tgt/1800*16;
+  const run=()=>{c=Math.min(c+step,tgt);el.textContent=isPct?Math.round(c)+'%':(tgt>=1000?Math.round(c).toLocaleString('en-IN')+'+':(Math.round(c)+'+'));if(c<tgt)requestAnimationFrame(run)};run();
+}
+const cobs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){animC(e.target);cobs.unobserve(e.target)}}),{threshold:.5});
+document.querySelectorAll('[data-target],[data-pct]').forEach(el=>cobs.observe(el));
+
+// ── Toast ──
+let tt;
+function addToCart(name,price){
+  const t=document.getElementById('toast');
+  document.getElementById('toast-t').textContent='Added to Wishlist!';
+  document.getElementById('toast-m').textContent=`${name} — ₹${parseInt(price).toLocaleString('en-IN')}`;
+  t.style.display='flex';clearTimeout(tt);tt=setTimeout(()=>t.style.display='none',3500);
+}
+
+// ── Contact Form ──
+function submitForm(e){
+  e.preventDefault();
+  const n=document.getElementById('fn').value,em=document.getElementById('fe').value,ph=document.getElementById('fp').value,tp=document.getElementById('ft').value,ms=document.getElementById('fm').value;
+  const body=encodeURIComponent(`Name: ${n}\nPhone: ${ph||'—'}\nTopic: ${tp||'General'}\n\nMessage:\n${ms}\n\n— Sent from LearnAcademy.ai`);
+  const sub=encodeURIComponent(`Inquiry from ${n} — LearnAcademy.ai`);
+  window.open(`mailto:learnacademy.ai@gmail.com?subject=${sub}&body=${body}`,'_blank');
+  document.getElementById('fok').style.display='block';
+  e.target.reset();setTimeout(()=>document.getElementById('fok').style.display='none',6000);
+}
+
+// ── Navbar scroll ──
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').style.background=window.scrollY>50?'rgba(5,13,10,.97)':'rgba(5,13,10,.85)';
+});
+</script>
+</body>
+</html>
